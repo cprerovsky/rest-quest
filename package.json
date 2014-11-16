@@ -1,0 +1,15 @@
+{
+  "name": "client-server-game",
+  "version": "0.0.0",
+  "description": "a HTTP REST client server game. yeah, that does not sound like fun.",
+  "main": "server.js",
+  "dependencies": {
+    "express.io": "~1.1.13"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Clemens Prerovsky",
+  "license": "MIT"
+}
