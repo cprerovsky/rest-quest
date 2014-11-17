@@ -3,41 +3,55 @@
 
 var Express = require('express.io');
 var Maps = require('lib/map');
+var Game = require('lib/game');
 
 
-var app = new Express();
-var state = {
-	players : [],
-	map     : Maps.create()
-};
+var App = new Express();
+var State = initState();
 
 
-app.post('/register/', function (req, res) {
+// ----- funcs -----
+
+function initPos () {
+	return { x: 0, y: 0 };
+}
+
+function initState () {
+	return {
+		players : {},
+		map     : Maps.create()
+	};
+}
+
+function player (name) {
+	if (State.players.hasOwnProperty(name)) {
+		return State.players[name];
+	}
+	throw 'requested illegal player ' + name;
+}
+
+// ----- routes -----
+
+App.post('/register/', function (req, res) {
 	var player = {
-		id   : req.params.id,
+		name   : req.params.name,
 		pos  : initPos(),
 		turn : 0
 	};
 
-	if (state.players.length > 2) {
-		throw 'more than 2 players in game - disqualified: ' + player.id;
-	}
-	
-	state.players.push(player);
+	State.players[player] = player;
 	res.send(JSON.stringify({ok : true}));
 });
 
-app.post('/move/', function (req, res) {
-	console.log('move');
+App.post('/move/', function (req, res) {	
+	Game.move(player(req.params.player), req.params.direction, State.map.size);
+
 	setTimeout(function () {
 		res.send(JSON.stringify({ 'ok' : true }));
 	}, 2000);
 });
 
-function initPos () {
-	return [0, 0];
-}
 
 
-app.listen(3000);
+App.listen(3000);
 console.log('Server started on localhost:3000');
