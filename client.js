@@ -14,7 +14,7 @@ function move() {
 		method : 'POST',
 		form   : {
 			player    : Player.name,
-			direction : 'up'
+			direction : 'right'
 		}		
 	}, function (error, res, body) {
 		printView(body);
