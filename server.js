@@ -63,8 +63,8 @@ App.post('/move/', function (req, res) {
 	console.log('moved player {' + p.name + '} to {' + p.pos.x + ',' + p.pos.y + '} in turn {' + p.turn + '}');
 
 	setTimeout(function () {
-		res.send('OK');
-	}, 1000);
+		res.send(JSON.stringify(Maps.view(p.pos, State.map)));
+	}, 500);
 });
 
 App.listen(3000);

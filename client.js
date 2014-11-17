@@ -17,11 +17,25 @@ function move() {
 			direction : 'up'
 		}		
 	}, function (error, res, body) {
-		console.log(body);
+		printView(body);
 		if (i<10) {
 				move();
 		}
 	});
+}
+
+function printView (str) {
+	var data = JSON.parse(str);
+	var logstr;
+
+	for (var y=0; y<data.length; y++) {
+		logstr = '';
+		for (var x=0; x<data.length; x++) {
+			logstr += data[y][x].type[0];
+		}
+		console.log(logstr);
+	}
+	console.log('\n');
 }
 
 Request({
