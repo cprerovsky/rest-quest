@@ -2,19 +2,24 @@
 'use strict';
 
 var Express = require('express.io');
+var Maps = require('lib/map');
+
+
 var app = new Express();
 var state = {
 	players : [],
-	map     : {}
+	map     : Maps.create()
 };
+
 
 app.post('/register/', function (req, res) {
 	var player = {
-		id  : req.params.id,
-		pos : initPos()
+		id   : req.params.id,
+		pos  : initPos(),
+		turn : 0
 	};
 
-	if (state.players.length === 2) {
+	if (state.players.length > 2) {
 		throw 'more than 2 players in game - disqualified: ' + player.id;
 	}
 	
@@ -33,6 +38,6 @@ function initPos () {
 	return [0, 0];
 }
 
-app.listen(3000);
 
+app.listen(3000);
 console.log('Server started on localhost:3000');
