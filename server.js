@@ -3,7 +3,6 @@
 
 var Express = require('express.io');
 var Maps = require('lib/map');
-var Game = require('lib/game');
 
 
 var App = new Express();
@@ -43,8 +42,18 @@ App.post('/register/', function (req, res) {
 	res.send(JSON.stringify({ok : true}));
 });
 
-App.post('/move/', function (req, res) {	
-	Game.move(player(req.params.player), req.params.direction, State.map.size);
+App.post('/move/', function (req, res) {
+	var p = player(req.params.player);
+	p.pos = Maps.move(p.pos, req.params.direction, State.map.size);
+	p.turn++;
+
+	console.log('moved player {' +
+		p.name +
+		'} to {' +
+		p.pos.x + ',' + p.pos.y +
+		'} in turn {' +
+		p.turn +
+		'}');
 
 	setTimeout(function () {
 		res.send(JSON.stringify({ 'ok' : true }));
