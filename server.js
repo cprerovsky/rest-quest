@@ -4,6 +4,8 @@
 var Express = require('express.io');
 var BodyParser = require('body-parser');
 var Maps = require('./lib/maps');
+var Game = require('./lib/game');
+var both = require('./lib/both');
 
 var App = new Express();
 var State = initState();
@@ -12,10 +14,6 @@ App.use(BodyParser.urlencoded({ extended: true }));
 
 
 // ----- funcs -----
-
-function initPos () {
-	return { x: 0, y: 0 };
-}
 
 function initState () {
 	return {
@@ -34,23 +32,13 @@ function player (name) {
 // ----- routes -----
 
 App.post('/register/', function (req, res) {
-	if (!req.body.name) {
-		throw 'cant register player without a name';
-	}
-
-	if (Object.keys(State.players).length >= 2) {
-		throw 'invalid join by player {' + player.name + '} - disqualified';
-	}
-
-	var newPlayer = {
-		name   : req.body.name,
-		pos  : initPos(),
-		turn : 0
-	};
-
-	State.players[newPlayer.name] = newPlayer;
-	console.log('registered player ', newPlayer);
-	res.send('OK');
+	var player = Game.player(req.body.name, State.players);
+	State.players[player.name] = player;
+	console.log('registered player ', player);
+	
+	both('register', function () {
+		res.send('OK');
+	}).once(function () { console.log('once!'); });
 });
 
 App.post('/move/', function (req, res) {
