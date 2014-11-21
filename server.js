@@ -3,8 +3,9 @@
 
 var Express = require('express.io');
 var BodyParser = require('body-parser');
+var Assert = require('./lib/assert');
 var Maps = require('./lib/maps');
-var Game = require('./lib/game');
+var Player = require('./lib/player');
 var both = require('./lib/both');
 
 var App = new Express();
@@ -22,17 +23,12 @@ function initState () {
 	};
 }
 
-function player (name) {
-	if (State.players.hasOwnProperty(name)) {
-		return State.players[name];
-	}
-	throw 'requested illegal player {' + name + '}';
-}
-
 // ----- routes -----
 
 App.post('/register/', function (req, res) {
-	var player = Game.player(req.body.name, State.players);
+	Assert.registryOpen(State.players);
+
+	var player = Player.create(req.body.name, State.players);
 	State.players[player.name] = player;
 	console.log('registered player ', player);
 	
@@ -42,16 +38,16 @@ App.post('/register/', function (req, res) {
 });
 
 App.post('/move/', function (req, res) {
-	var p = player(req.body.player);
-	var newPos = Maps.move(p.pos, req.body.direction, State.map.size);
-	console.log(p, newPos);
-	p.pos = newPos;
-	p.turn++;
+	Assert.registryClosed(State.players);
+	var player = Player.get(req.body.player);
+	var newPos = Maps.move(player.pos, req.body.direction, State.map.size);
+	player.pos = newPos;
+	player.turn++;
 
-	console.log('moved player {' + p.name + '} to {' + p.pos.x + ',' + p.pos.y + '} in turn {' + p.turn + '}');
+	console.log('moved player {' + player.name + '} to {' + player.pos.x + ',' + player.pos.y + '} in turn {' + player.turn + '}');
 
 	setTimeout(function () {
-		res.send(JSON.stringify(Maps.view(p.pos, State.map)));
+		res.send(JSON.stringify(Maps.view(player.pos, State.map)));
 	}, 500);
 });
 
