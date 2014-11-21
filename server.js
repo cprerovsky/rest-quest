@@ -30,9 +30,18 @@ App.post('/register/', function (req, res) {
 
 	var player = Player.create(req.body.name, State.players);
 	State.players[player.name] = player;
-	console.log('registered player ', player);
+	
+	var castlePlace = Maps.placementTile(State.map);
+	castlePlace.tile.castle = player.name;
+	player.pos = {
+		x: castlePlace.x,
+		y: castlePlace.y
+	};
+
+	console.log('registered player {' + player.name + '} at {' + player.pos.x + ',' + player.pos.y + '}');
 	
 	both('register', function () {
+		
 		res.send('OK');
 	}).once(function () { console.log('once!'); });
 });
