@@ -46,5 +46,5 @@ Request({
 	}
 }, function (error, res, body) {
 	console.log(body);
-	//move();
+	move();
 });
