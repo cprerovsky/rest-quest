@@ -20,6 +20,8 @@ function move() {
 		printView(body);
 		if (i<10) {
 				move();
+		} else {
+			Request({ uri: BASE_URL + '/reset/', method : 'GET' });
 		}
 	});
 }
@@ -31,7 +33,7 @@ function printView (str) {
 	for (var y=0; y<data.length; y++) {
 		logstr = '';
 		for (var x=0; x<data.length; x++) {
-			logstr += data[y][x].type[0];
+			logstr += data[y][x].type[0] + ' ';
 		}
 		console.log(logstr);
 	}
