@@ -17,7 +17,7 @@ function move() {
 			direction : 'right'
 		}		
 	}, function (error, res, body) {
-		print(body);
+		console.log(body);
 		if (i<10) {
 				move();
 		} else {
