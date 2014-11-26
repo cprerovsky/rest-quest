@@ -17,7 +17,7 @@ function move() {
 			direction : 'right'
 		}		
 	}, function (error, res, body) {
-		printView(body);
+		print(body);
 		if (i<10) {
 				move();
 		} else {
@@ -26,9 +26,14 @@ function move() {
 	});
 }
 
-function printView (str) {
+function print (str) {
 	var data = JSON.parse(str);
 	var logstr;
+
+	if (!data.view) {
+		console.log(data);
+		return;
+	}
 
 	for (var y=0; y<data.length; y++) {
 		logstr = '';
