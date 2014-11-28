@@ -11,6 +11,14 @@
 	    placePlayers(data.players);
 	});
 
+	io.on('move', function(strdata) {
+	    var players = JSON.parse(strdata);
+		var names = Object.keys(players);
+		names.forEach(function (name) {
+			move(players[name]);
+		});
+	});
+
 	function drawMap (map) {
 		var $tr;
 		var $td;
@@ -47,6 +55,7 @@
 		var $avatar;
 		names.forEach(function (name) {
 			$pdiv = $players.getElementsByClassName('player' + i)[0];
+			$pdiv.innerHTML = '';
 			$pdiv.appendChild(icon('fi-torso'));
 			$pdiv.appendChild(t(' ' + name));
 

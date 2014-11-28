@@ -14,7 +14,7 @@ App.use(Express.static(__dirname + '/static'));
 App.http().io();
 
 App.post('/register/', function (req, res) { Game.register(State, req, res, App.io); });
-App.post('/move/',     function (req, res) { Game.move(State, req, res); });
+App.post('/move/',     function (req, res) { Game.move(State, req, res, App.io); });
 App.get('/reset/',     function (req, res) { State = Game.state(); both.clear(); res.send('reset ok'); console.log('reset')});
 
 App.listen(3000);

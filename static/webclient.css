@@ -36,6 +36,15 @@
 	color: #FFD700;
 }
 
+#players div {
+	width: 50%;
+	float: left;
+}
+
+#players .player1 {
+	text-align: right;
+}
+
 .avatar, .player1, .player2 {
 	font-size: 80px;
 }
