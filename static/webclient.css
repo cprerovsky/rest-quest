@@ -1,0 +1,40 @@
+#map {
+	margin: auto;
+	padding: 0;
+	border-spacing: 0;
+}
+
+#map tr, #map td {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+.tile {
+	width: 80px;
+	height: 80px;
+	background-color: #679E39;
+}
+
+.tile img {
+	width: 80%;
+	margin-left: 10%;
+	opacity: 0.5;
+}
+
+.treasure {
+	outline: 4px solid #FFD700;
+}
+
+.grass {
+}
+
+.forest {
+}
+
+.mountain {
+	background-color: #666;
+}
+
+.water {
+	background-color: #28666C;
+}

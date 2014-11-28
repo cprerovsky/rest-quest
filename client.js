@@ -5,6 +5,7 @@ var Request = require('request');
 
 var Player = { name : 'clembot-' + parseInt(Math.random() * 1000, 10) };
 var BASE_URL = 'http://localhost:3000';
+var DIRECTIONS = ['up', 'right', 'down', 'left'];
 
 var i=0;
 function move() {
