@@ -9,32 +9,48 @@
 	margin: 0px;
 	border: 0px;
 }
-.tile {
+.tile, .avatar {
 	width: 80px;
 	height: 80px;
 	background-color: #679E39;
+	text-align: center;
 }
 
-.tile img {
-	width: 80%;
-	margin-left: 10%;
-	opacity: 0.5;
-}
-
-.treasure {
-	outline: 4px solid #FFD700;
-}
-
-.grass {
+.tile i {
+	font-size: 50px;
 }
 
 .forest {
+	color: rgb(31,86,0);
 }
 
 .mountain {
-	background-color: #666;
+	color: #414141;
 }
 
 .water {
 	background-color: #28666C;
+}
+
+.treasure {
+	color: #FFD700;
+}
+
+.avatar, .player1, .player2 {
+	font-size: 80px;
+}
+
+.player1 {
+	color: rgb(0, 139, 255);
+}
+
+.player2 {
+	color: rgb(255, 77, 0);
+}
+
+.avatar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: transparent;
 }

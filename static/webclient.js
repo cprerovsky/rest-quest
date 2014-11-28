@@ -8,6 +8,7 @@
 	io.on('start', function(strdata) {
 	    var data = JSON.parse(strdata);
 	    drawMap(data.map);
+	    placePlayers(data.players);
 	});
 
 	function drawMap (map) {
@@ -15,18 +16,21 @@
 		var $td;
 		var $table = $$('map');
 		$table.innerHTML = '';
-		map.rows.forEach(function (row) {
+		map.rows.forEach(function (row, y) {
 			$tr = el('TR');
-			row.forEach(function (tile) {
+			row.forEach(function (tile, x) {
 				$td = el('TD');
+				$td.id = 'tile-' + x + '-' + y;
 				$td.className = '';
 				if (tile.castle) {
-					$td.appendChild(img('img/castle.png'));
+					$td.appendChild(icon('fi-shield'));
 				} else if (tile.treasure) {
-					$td.appendChild(img('img/treasure.png'));
+					$td.appendChild(icon('fi-crown'));
 					$td.className += 'treasure ';
-				} else if (tile.type !== 'grass') {
-					$td.appendChild(img('img/' + tile.type + '.png'));
+				} else if (tile.type === 'forest') {
+					$td.appendChild(icon('fi-trees'));
+				} else if (tile.type === 'mountain') {
+					$td.appendChild(icon('fi-mountains'));
 				}
 				$td.className += 'tile ' + tile.type;
 				$tr.appendChild($td);
@@ -35,14 +39,46 @@
 		});
 	}
 
+	function placePlayers (players) {
+		var names = Object.keys(players);
+		var i=1;
+		var $players = $$('players');
+		var $pdiv;
+		var $avatar;
+		names.forEach(function (name) {
+			$pdiv = $players.getElementsByClassName('player' + i)[0];
+			$pdiv.appendChild(icon('fi-torso'));
+			$pdiv.appendChild(t(' ' + name));
+
+			// link player to avatar
+			$avatar = document.getElementsByClassName('avatar player' + i)[0];
+			$avatar.id = name;
+
+			move(players[name]);
+
+			i++;
+		});
+	}
+
+	function move(player) {
+		var $avatar        = $$(player.name);
+		var boundingRect   = $$('tile-' + player.pos.x + '-' + player.pos.y).getBoundingClientRect();
+		$avatar.style.top  = boundingRect.top + 'px';
+		$avatar.style.left = boundingRect.left + 'px'; 
+	}
+
+	function t (text) {
+		return document.createTextNode(text);
+	}
+
 	function el (nodeName) {
 		return document.createElement(nodeName);
 	}
 
-	function img (src) {
-		var $img = el('IMG');
-		$img.src = src;
-		return $img;
+	function icon (type) {
+		var $i = el('I');
+		$i.className = type;
+		return $i;
 	}
 
 	function $$ (id) {

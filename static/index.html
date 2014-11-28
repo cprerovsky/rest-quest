@@ -2,13 +2,20 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="webclient.css"/>
+	<link rel="stylesheet" type="text/css" href="foundation-icons.css"/>
 </head>
 <body>
-<table id="map"></table>
+	<div id="players">
+		<div class="player1"></div>
+		<div class="player2"></div>
+	</div>
 
-<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+	<div class="avatar player1"><i class="fi-torso"></i></div>
+	<div class="avatar player2"><i class="fi-torso"></i></div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/webclient.js"></script>
+	<table id="map"></table>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/webclient.js"></script>
 </body>
 </html>
