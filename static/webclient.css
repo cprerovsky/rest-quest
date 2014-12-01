@@ -38,10 +38,6 @@ body {
 	background-color: #28666C;
 }
 
-.treasure {
-	color: #FFD700;
-}
-
 #players div {
 	width: 50%;
 	float: left;
@@ -68,4 +64,16 @@ body {
 	top: 0;
 	right: 0;
 	background: transparent;
+}
+
+.fi-crown {
+	color: #FFD700;
+}
+
+.avatar .fi-crown {
+	color: #FFD700;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 30px;
 }
