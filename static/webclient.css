@@ -16,14 +16,14 @@ body {
 	border-radius: 10px;
 }
 .tile, .avatar {
-	width: 80px;
-	height: 80px;
+	width: 60px;
+	height: 60px;
 	background-color: #679E39;
 	text-align: center;
 }
 
 .tile i {
-	font-size: 50px;
+	font-size: 40px;
 }
 
 .forest {
