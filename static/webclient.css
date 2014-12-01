@@ -39,7 +39,7 @@ body {
 }
 
 #players div {
-	width: 50%;
+	width: 46%;
 	float: left;
 }
 
@@ -47,8 +47,12 @@ body {
 	text-align: right;
 }
 
+#players .player1, #players .player2 {
+	padding: 2%;
+}
+
 .avatar, .player1, .player2 {
-	font-size: 80px;
+	font-size: 60px;
 }
 
 .player1 {
