@@ -6,13 +6,14 @@ body {
 	margin: auto;
 	padding: 0;
 	border-spacing: 0;
-	box-shadow: 0 0 100px rgba(0,0,0,0.5);
+	border-collapse: collapse;
 }
 
 #map tr, #map td {
 	padding: 0px;
 	margin: 0px;
-	border: 0px;
+	border: 2px solid #414141;
+	border-radius: 10px;
 }
 .tile, .avatar {
 	width: 80px;
@@ -68,6 +69,8 @@ body {
 	top: 0;
 	right: 0;
 	background: transparent;
+	-webkit-transition: top 0.2s, left 0.2s;
+	transition: top 0.2s, left 0.2s;
 }
 
 .fi-crown {
