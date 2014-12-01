@@ -7,6 +7,7 @@
 	// Listen for the talk event.
 	io.on('start', function(strdata) {
 	    var data = JSON.parse(strdata);
+	    $$('result').style.display = 'none';
 	    Array.prototype.slice.call(document.getElementsByClassName('fi-crown')).forEach(function (el) { el.remove(); });
 	    drawMap(data.map);
 	    placePlayers(data.players);
@@ -24,6 +25,17 @@
 		var player = JSON.parse(strdata);
 		var $treasure = $$('tile-' + player.pos.x + '-' + player.pos.y).getElementsByClassName('fi-crown')[0];
 		$$(player.name).appendChild($treasure);
+	});
+
+	io.on('gameover', function (strdata) {
+		var res = JSON.parse(strdata);
+		var $result = $$('result');
+		if (res.result === 'draw') {
+			$result.innerText = 'DRAW';
+		} else {
+			$result.innerText = 'Winner: ' + res.winner;
+		}
+		$result.style.display = 'block';
 	});
 
 	function drawMap (map) {
