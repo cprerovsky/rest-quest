@@ -1,4 +1,4 @@
-/*global require,console*/
+/*global require,console,__dirname*/
 'use strict';
 
 var Express    = require('express.io');
@@ -15,7 +15,7 @@ App.http().io();
 
 App.post('/register/', function (req, res) { Game.register(State, req, res, App.io); });
 App.post('/move/',     function (req, res) { Game.move(State, req, res, App.io); });
-App.get('/reset/',     function (req, res) { State = Game.state(); both.clear(); res.send('reset ok'); console.log('reset')});
+App.get('/reset/',     function (req, res) { State = Game.state(); both.clear(); res.send('reset ok'); console.log('reset');});
 
 App.listen(3000);
 console.log('Server started on localhost:3000');
