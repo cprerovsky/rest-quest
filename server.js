@@ -1,4 +1,5 @@
 /*global require,console,__dirname*/
+/* jshint node:true */
 'use strict';
 
 var Express    = require('express.io');
