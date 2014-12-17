@@ -24,8 +24,8 @@ A view is an array of an array of objects that describes the surrounding tiles y
 Different terrains allow for different visiblity
 
 * forest: 3x3 view
-* grass: 4x4 view
-* mountain: 5x5 view
+* grass: 5x5 view
+* mountain: 7x7 view
 
 Your avatar is always positioned at the **center** of the view, so in the previous example he is positioned on the only forest tile.
 
