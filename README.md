@@ -13,11 +13,13 @@ Write a client that consumes server.js's REST API, grabs a **treasure** and retu
 
 A view is an array of an array of objects that describes the surrounding tiles you can see. As different terrains provide different visibility, the array size can change.
 
-```[
+```
+[
 	[ {"type": "grass"}, {"type": "mountain"}, {"type": "mountain"} ],
 	[ {"type": "grass"}, {"type": "forest"}, {"type": "water"} ],
 	[ {"type": "grass"}, {"type": "water"}, {"type": "water"} ]
-]```
+]
+```
 
 Different terrains allow for different visiblity
 
@@ -31,11 +33,13 @@ Your avatar is always positioned at the **center** of the view, so in the previo
 
 The tiles contained in a view can contain the following data:
 
-```{
+```
+{
 	"type":     "grass", // the tile type
 	"castle":   "[playername]", // castle of a player named [playername]
 	"treasure": true // treasure
-}```
+}
+```
 ## Movement
 
 You can ```/move/``` either
@@ -51,7 +55,9 @@ Moving up a mountains takes **two** consecutive turns of moving in the same dire
 
 When the game is over because you or your opponent died, or took a treasure to the castle you will receive a game over response.
 
-```{
+```
+{
 	"game"   : "over",
 	"result" : "won" // won, lost or draw
-}```
+}
+```
