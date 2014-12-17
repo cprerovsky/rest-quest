@@ -45,9 +45,10 @@ function move (dir, cb) {
 		form   : {
 			player    : Player.name,
 			direction : dir
-		}		
+		}
 	}, function (error, res, body) {
 		var data = JSON.parse(body);
+		printView(data.view);
 		if (data.game) {
 			console.log(Player.name, data);
 			reset();
@@ -58,7 +59,8 @@ function move (dir, cb) {
 }
 
 function nextSearchStep () {
-	return Math.random() >= 0.5 ? 'right' : 'up';
+	return 'up';
+	//return Math.random() >= 0.5 ? 'right' : 'up';
 }
 
 function reset () {
@@ -67,6 +69,19 @@ function reset () {
 		method : 'GET',
 	}, function () {});
 }
+
+function printView (data) {
+	if (!data || !data.length) return;
+	for (var y=0; y<data.length; y++) {
+		var logstr = '';
+		for (var x=0; x<data.length; x++) {
+			logstr += data[y][x].castle ? 'C ' : data[y][x].type[0] + ' ';
+		}
+		console.log(logstr);
+	}
+	console.log('\n');
+}
+
 
 request({
 	uri    : BASE_URL + '/register/',

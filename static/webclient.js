@@ -1,7 +1,7 @@
 /* global io, document */
 (function (io, document) {
 	'use strict';
-	
+
 	io = io.connect();
 
 	// Listen for the talk event.
@@ -43,7 +43,8 @@
 		var $td;
 		var $table = $$('map');
 		$table.innerHTML = '';
-		map.rows.forEach(function (row, y) {
+		for (var y=map.rows.length-1; y>=0; y--) {
+			var row = map.rows[y];
 			$tr = el('TR');
 			row.forEach(function (tile, x) {
 				$td = el('TD');
@@ -62,7 +63,7 @@
 				$tr.appendChild($td);
 			});
 			$table.appendChild($tr);
-		});
+		}
 	}
 
 	function placePlayers (players) {
@@ -91,7 +92,7 @@
 		var $avatar        = $$(player.name);
 		var boundingRect   = $$('tile-' + player.pos.x + '-' + player.pos.y).getBoundingClientRect();
 		$avatar.style.top  = boundingRect.top + 'px';
-		$avatar.style.left = boundingRect.left + 'px'; 
+		$avatar.style.left = boundingRect.left + 'px';
 	}
 
 	function t (text) {
