@@ -6,12 +6,14 @@ var Express    = require('express.io');
 var BodyParser = require('body-parser');
 var Game       = require('./lib/game');
 var both       = require('./lib/both');
+var cors       = require('cors');
 
 var State = Game.state();
 var App = new Express();
 
 App.use(BodyParser.urlencoded({ extended: true }));
 App.use(Express.static(__dirname + '/static'));
+App.use(cors());
 App.http().io();
 
 App.post('/register/', function (req, res) { Game.register(State, req, res, App.io); });

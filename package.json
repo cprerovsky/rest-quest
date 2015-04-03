@@ -4,9 +4,10 @@
   "description": "a HTTP REST client server game. yeah, that does not sound like fun.",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "^1.9.2",
+    "cors": "^2.5.3",
     "express.io": "~1.1.13",
-    "request": "^2.48.0",
-    "body-parser": "^1.9.2"
+    "request": "^2.48.0"
   },
   "devDependencies": {},
   "scripts": {
