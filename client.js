@@ -58,8 +58,9 @@ function move (dir, cb) {
 	});
 }
 
+var last = 'down';
 function nextSearchStep () {
-	return 'up';
+	return last = last == 'down' ? 'up' : 'down';
 	//return Math.random() >= 0.5 ? 'right' : 'up';
 }
 
