@@ -2,6 +2,43 @@
 
 Write a client that consumes server.js's REST API, grabs a **treasure** and returns to your **castle** faster than your opponent.
 
+## Installation
+
+**Prerequisites**
+
+You'll need NodeJS (https://nodejs.org), NPM (included in NodeJS) and Git installed on your machine.
+
+**Installation**
+
+Clone the repository and run ```npm install```:
+
+```
+git clone git@github.com:cprerovsky/rest-quest.git
+cd rest-quest
+npm install
+```
+
+**Run**
+
+Run the server using ```node```
+
+```
+node server.js
+```
+
+Now point your browser to http://localhost:3000.
+
+When the server is running you can connect two clients one after another.
+A really stupid test client is included in the package, which you can start
+twice to see if everything runs fine:
+
+```
+node client.js & node client.js
+```
+
+As soon as you start the clients a map appears in the browser and the two
+clients will start to battle it out like two drunk roombas.
+
 ## API
 
 1. ```/register/``` your player by sending a POST request with your ```name```
