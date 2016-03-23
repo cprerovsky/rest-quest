@@ -1,18 +1,35 @@
 {
-  "name": "client-server-game",
-  "version": "0.0.0",
-  "description": "a HTTP REST client server game. yeah, that does not sound like fun.",
+  "name": "rest-quest",
+  "version": "0.1.0",
+  "description": "A HTTP REST client server game. Yeah, that does not sound like much fun.",
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.9.2",
     "cors": "^2.5.3",
     "express.io": "~1.1.13",
-    "request": "^2.48.0"
+    "request": "^2.48.0",
+    "connect": "^3.4.1",
+    "coffee-script": "^1.10.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "Clemens Prerovsky",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cprerovsky/rest-quest.git"
+  },
+  "keywords": [
+    "rest"
+  ],
+  "bugs": {
+    "url": "https://github.com/cprerovsky/rest-quest/issues"
+  },
+  "homepage": "https://github.com/cprerovsky/rest-quest"
 }
