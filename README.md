@@ -104,6 +104,14 @@ You can ```/move/``` either
 
 Moving up a mountains takes **two** consecutive turns of moving in the same direction. So if you want to climb a mountain tile in direction ```up``` you will have to send the ```up``` direction twice - in two separate requests. Moving onto **water** or the **enemy castle** will **instantly kill you**.
 
+## Invalid Operation
+
+If you violate protocol, eg. by invoking the ```/move/``` API even though the game has not been startet yet, you will receive an ```Invalid Operation Response```:
+
+```
+{ error : 'Invalid Operation' }
+```
+
 ## Game Over
 
 When the game is over because you or your opponent died, or took a treasure to the castle you will receive a game over response.
