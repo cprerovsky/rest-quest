@@ -18,6 +18,8 @@ cd rest-quest
 npm install
 ```
 
+If you don't have a github account, cloning the repository will not be possible. In this case you can download the latest release as a zip file: https://github.com/cprerovsky/rest-quest/archive/master.zip
+
 **Run**
 
 Run the server using ```node```
@@ -42,25 +44,39 @@ clients will start to battle it out like two drunk roombas.
 ## API
 
 1. ```/register/``` your player by sending a POST request with your ```name```
-2. wait for your POST request to be answered by the server with a view
+2. wait for your POST request to be answered by the server with a ```view```
 3. POST your next move to ```/move/``` with ```player```containing your name and ```direction``` the direction you want to move to. The server will also answer with a view
 
 
-## What is a 'view'?
+## What is a ```view```?
 
-A view is an array of an array of objects that describes the surrounding tiles you can see. As different terrains provide different visibility, the array size can change.
+A view is an array of an array of objects that describes the
+surrounding tiles you can see. As different terrains provide
+different visibility, the array size can change.
 
 ```
-[
-	[ {"type": "grass"}, {"type": "mountain"}, {"type": "mountain"} ],
-	[ {"type": "grass"}, {"type": "forest"}, {"type": "water"} ],
-	[ {"type": "grass"}, {"type": "water"}, {"type": "water"} ]
-]
+{
+    view: [
+        [ {"type": "grass"}, {"type": "mountain"}, {"type": "mountain"} ],
+        [ {"type": "grass"}, {"type": "forest"}, {"type": "water"} ],
+        [ {"type": "grass"}, {"type": "water"}, {"type": "water"} ]
+    ],
+    treasure: false
+}
 ```
 
-Different terrains allow for different visiblity
+Included with the ```view``` the server response also contains
+the ```treasure``` parameter, which tells you whether you successfully
+picked up the treasure from the map. The other player might have
+snatched the treasure the moment before you moved on the target square,
+so this field is for you to document whether you picked it up successfully.
 
-* forest: 3x3 view
+## Range of vision
+
+Different terrains allow for different range, thus changing the size
+of the view returned.
+
+* forest: will give you a 3x3 view of your surroundings
 * grass: 5x5 view
 * mountain: 7x7 view
 
