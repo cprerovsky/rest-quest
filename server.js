@@ -7,12 +7,14 @@ var BodyParser = require('body-parser');
 var Game       = require('./lib/game');
 var both       = require('./lib/both');
 var cors       = require('cors');
+var httpdump   = require('./lib/utils').httpdump;
 
 var State = Game.state();
 var App = new Express();
 
 App.use(BodyParser.urlencoded({ extended: true }));
 App.use(Express.static(__dirname + '/static'));
+App.use(httpdump);
 App.use(cors());
 App.http().io();
 

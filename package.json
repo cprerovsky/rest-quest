@@ -1,6 +1,6 @@
 {
   "name": "rest-quest",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A HTTP REST client server game. Yeah, that does not sound like much fun.",
   "main": "server.js",
   "dependencies": {
