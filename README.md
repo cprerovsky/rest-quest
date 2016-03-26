@@ -122,3 +122,11 @@ When the game is over because you or your opponent died, or took a treasure to t
 	"result" : "won" // won, lost or draw
 }
 ```
+
+# Changelog
+
+## Version 0.2.0
+
+* added think time calculation
+* vastly improved logging
+* improved documentation
