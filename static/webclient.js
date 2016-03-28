@@ -2,68 +2,60 @@
 (function (io, document) {
 	'use strict';
 
-	io = io.connect();
+	// io = io.connect();
 
-	// Listen for the talk event.
-	io.on('start', function(strdata) {
-	    var data = JSON.parse(strdata);
-	    $$('result').style.display = 'none';
-	    Array.prototype.slice.call(document.getElementsByClassName('fi-crown')).forEach(function (el) { el.remove(); });
-	    drawMap(data.map);
-	    placePlayers(data.players);
-	});
+	// io.on('start', function(strdata) {
+	//     var data = JSON.parse(strdata);
+	//     $$('result').style.display = 'none';
+	//     Array.prototype.slice.call(document.getElementsByClassName('fi-crown')).forEach(function (el) { el.remove(); });
+	//     drawMap(data.map);
+	//     placePlayers(data.players);
+	// });
 
-	io.on('move', function(strdata) {
-	    var players = JSON.parse(strdata);
-		var names = Object.keys(players);
-		names.forEach(function (name) {
-			move(players[name]);
-		});
-	});
+	// io.on('move', function(strdata) {
+	//     var players = JSON.parse(strdata);
+	// 	var names = Object.keys(players);
+	// 	names.forEach(function (name) {
+	// 		move(players[name]);
+	// 	});
+	// });
 
-	io.on('pickup', function (strdata) {
-		var player = JSON.parse(strdata);
-		var $treasure = $$('tile-' + player.pos.x + '-' + player.pos.y).getElementsByClassName('fi-crown')[0];
-		$$(player.name).appendChild($treasure);
-	});
+	// io.on('pickup', function (strdata) {
+	// 	var player = JSON.parse(strdata);
+	// 	var $treasure = $$('tile-' + player.pos.x + '-' + player.pos.y).getElementsByClassName('fi-crown')[0];
+	// 	$$(player.name).appendChild($treasure);
+	// });
 
-	io.on('gameover', function (strdata) {
-		var res = JSON.parse(strdata);
-		var $result = $$('result');
-		if (res.result === 'draw') {
-			$result.innerText = 'DRAW';
-		} else {
-			$result.innerText = 'Winner: ' + res.winner;
-		}
-		$result.style.display = 'block';
-	});
+	// io.on('gameover', function (strdata) {
+	// 	var res = JSON.parse(strdata);
+	// 	var $result = $$('result');
+	// 	if (res.result === 'draw') {
+	// 		$result.innerText = 'DRAW';
+	// 	} else {
+	// 		$result.innerText = 'Winner: ' + res.winner;
+	// 	}
+	// 	$result.style.display = 'block';
+	// });
 
 	function drawMap (map) {
-		var $tr;
-		var $td;
-		var $table = $$('map');
-		$table.innerHTML = '';
+        var num = map.rows.length;
+        var $body = document.getElementsByTagName('body')[0];
+        var height = $body.scrollHeight; 
+        var size = parseInt(height / num, 10);
+        var $r, $c, row;
 		for (var y=map.rows.length-1; y>=0; y--) {
-			var row = map.rows[y];
-			$tr = el('TR');
+			row = map.rows[y];
+            $r = el('DIV');
+            $r.style.height = size + 'px';
+            $r.className='row';
 			row.forEach(function (tile, x) {
-				$td = el('TD');
-				$td.id = 'tile-' + x + '-' + y;
-				$td.className = '';
-				if (tile.castle) {
-					$td.appendChild(icon('fi-shield'));
-				} else if (tile.treasure) {
-					$td.appendChild(icon('fi-crown'));
-				} else if (tile.type === 'forest') {
-					$td.appendChild(icon('fi-trees'));
-				} else if (tile.type === 'mountain') {
-					$td.appendChild(icon('fi-mountains'));
-				}
-				$td.className += 'tile ' + tile.type;
-				$tr.appendChild($td);
-			});
-			$table.appendChild($tr);
-		}
+                $c = mapTile(tile.type, size, 'tile-' + x + '-' + y);
+                if (tile.castle) $c.appendChild(mapTile('castle', size));
+                if (tile.treasure) $c.appendChild(mapTile('treasure', size));
+                $r.appendChild($c);
+            });
+            $body.appendChild($r);
+        }
 	}
 
 	function placePlayers (players) {
@@ -103,6 +95,14 @@
 		return document.createElement(nodeName);
 	}
 
+    function mapTile(type, size, id) {
+        var $tile = el('DIV');
+        $tile.className = 'tile ' + type; 
+        $tile.style.width = $tile.style.height = size + 'px';
+        if (id) $tile.id = id;
+        return $tile;
+    }
+
 	function icon (type) {
 		var $i = el('I');
 		$i.className = type;
@@ -112,4 +112,6 @@
 	function $$ (id) {
 		return document.getElementById(id);
 	}
+    
+    drawMap({"size":9,"rows":[[{"type":"water"},{"type":"forest"},{"type":"mountain"},{"type":"mountain"},{"type":"grass"},{"type":"water"},{"type":"grass"},{"type":"mountain"},{"type":"forest"}],[{"type":"forest"},{"type":"mountain"},{"type":"mountain"},{"type":"water"},{"type":"mountain"},{"type":"grass"},{"type":"forest"},{"type":"grass"},{"type":"grass"}],[{"type":"grass"},{"type":"grass"},{"type":"grass"},{"type":"mountain"},{"type":"grass"},{"type":"mountain"},{"type":"grass","treasure":true},{"type":"forest","treasure":true},{"type":"grass"}],[{"type":"grass"},{"type":"grass"},{"type":"grass"},{"type":"mountain", "treasure": true},{"type":"forest"},{"type":"grass"},{"type":"forest"},{"type":"forest"},{"type":"grass"}],[{"type":"grass"},{"type":"mountain"},{"type":"grass"},{"type":"forest"},{"type":"mountain"},{"type":"mountain"},{"type":"mountain"},{"type":"grass"},{"type":"grass"}],[{"type":"mountain"},{"type":"mountain"},{"type":"grass","castle":"clembot-71"},{"type":"grass"},{"type":"mountain"},{"type":"forest"},{"type":"grass"},{"type":"mountain"},{"type":"grass"}],[{"type":"forest"},{"type":"forest"},{"type":"grass"},{"type":"forest"},{"type":"grass"},{"type":"mountain"},{"type":"water"},{"type":"grass", "treasure": true},{"type":"grass"}],[{"type":"grass","castle":"clembot-68"},{"type":"mountain"},{"type":"grass"},{"type":"grass"},{"type":"grass"},{"type":"grass"},{"type":"mountain"},{"type":"grass"},{"type":"grass"}],[{"type":"water"},{"type":"grass"},{"type":"mountain"},{"type":"grass"},{"type":"forest"},{"type":"mountain"},{"type":"grass"},{"type":"grass"},{"type":"grass"}]]});
 })(io, document);
