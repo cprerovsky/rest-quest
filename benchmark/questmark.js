@@ -30,11 +30,17 @@ var benchmarkState = {
 var map;
 
 /**
+ * The regex used to identify a valid map number argument.
+ * @type {RegExp}
+ */
+var argRe = /^-\d{1,2}$/;
+
+/**
  * Load the contents of the map
  * @param mapNumber
  */
 function loadMap(mapNumber) {
-    mapNumber = mapNumber || '-1';
+    mapNumber = argRe.test(mapNumber) ? mapNumber : '-1';
     mapNumber = mapNumber.replace('-', '');
     
     try {
@@ -78,11 +84,13 @@ function start(State, req, res, io) {
 
     // make sure the player castle is not in water
     if (State.map.rows[player.pos.y][player.pos.x].type === 'water') {
-        throw 'uh oh - this benchmark map placed the player castle in water!';
+        qLog(chalk.red('Error: This benchmark map places the player castle in water!'));
+        throw 'Aborting';
     }
     // make sure the treasure is not in water
     if (State.map.rows[map.treasure[1]][map.treasure[0]].type === 'water') {
-        throw 'uh oh - this benchmark map placed the treasure in water!';
+        qLog(chalk.red('Error: This benchmark map places the treasure in water!'));
+        throw 'Aborting';
     }
     
     res.send(Response.view(player, State.map));
@@ -251,6 +259,7 @@ function qLog(message) {
 }
 
 module.exports = {
+    argRe: argRe,
     loadMap: loadMap,
     start: start,
     enemyReq: enemyReq,

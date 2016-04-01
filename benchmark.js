@@ -31,7 +31,7 @@ App.use(Express.static(__dirname + '/static'));
 App.use(cors());
 App.http().io();
 
-var mapNumber = process.argv.filter(arg => /\-\d{1,2}/.test(arg))[0];
+var mapNumber = process.argv.filter(arg => Questmark.argRe.test(arg))[0];
 Questmark.loadMap(mapNumber);
 
 App.post('/register/', function (req, res) { Questmark.start(State, req, res, App.io); });
