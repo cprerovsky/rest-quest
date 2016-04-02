@@ -36,10 +36,11 @@ Questmark.loadMap(mapNumber);
 
 App.post('/register/', function (req, res) { Questmark.start(State, req, res, App.io); });
 App.post('/move/', function (req, res) {
-    res = Questmark.patchResponse(res);
-    Game.move(State, req, res, App.io);
+    // patch the response and make the player's move.
+    var patchedRes = Questmark.patchResponse(res);
+    Game.move(State, req, patchedRes, App.io);
     // simulate the enemy's move
-    Game.move(State, Questmark.enemyReq(), res, App.io);
+    Game.move(State, Questmark.enemyReq(), patchedRes, App.io);
 });
 App.get('/reset/', function (req, res) { State = Game.state(); both.clear(); res.send('reset ok'); console.log('reset');});
 

@@ -164,6 +164,9 @@ function charToTile(char) {
     return { type: type };
 }
 
+// When playing the game, responses are sent alternately for the player and the the
+// enemy. We only want to record state changes on the player's turns.
+var playerMove = true;
 /**
  * Monkey-patches the Express res.send() method so that Questmark can intercept the response before it
  * is sent back to the client. Needed to be able to catch events such as finding treasure and winning 
@@ -176,22 +179,24 @@ function patchResponse(res) {
     res.send = function monkeySend(val) {
         var r = JSON.parse(val);
         var s = benchmarkState;
-        
-        if (r.game && r.game === 'over') {
-            s.result = r.result;
-            printReport();
-        } else {
 
-            if (!s.hasTreasure) {
-                s.searchTurns++;
-            } else {
-                s.returnTurns++;
-            }
+        if (playerMove) {
+            if (r.game && r.game === 'over') {
+                s.result = r.result;
+                printReport();
+            } else if (r.view) {
+                if (!s.hasTreasure) {
+                    s.searchTurns++;
+                } else {
+                    s.returnTurns++;
+                }
 
-            if (r.treasure === true) {
-                s.hasTreasure = true;
+                if (r.treasure === true) {
+                    s.hasTreasure = true;
+                }
             }
         }
+        playerMove = !playerMove;
 
         _send(val);
     };
