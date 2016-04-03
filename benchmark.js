@@ -33,6 +33,7 @@ App.http().io();
 
 var mapNumber = process.argv.filter(arg => Questmark.argRe.test(arg))[0];
 Questmark.loadMap(mapNumber);
+Questmark.onEnd(() => process.exit());
 
 App.post('/register/', function (req, res) { Questmark.start(State, req, res, App.io); });
 App.post('/move/', function (req, res) {

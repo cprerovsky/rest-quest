@@ -30,6 +30,11 @@ var benchmarkState = {
 var map;
 
 /**
+ * Callback to invoke when the benchmark ends. Set with the exported `onEnd()` function.
+ */
+var onEndCallback = () => {};
+
+/**
  * The regex used to identify a valid map number argument.
  * @type {RegExp}
  */
@@ -69,30 +74,27 @@ function start(State, req, res, io) {
         return;
     }
 
+    qLog(chalk.blue('====== QuestMark Start ======'));
     qLog(`Registering player: ${JSON.stringify(req.body.name)}`);
 
     var player = Player.create(req.body.name);
     State.players[player.name] = player;
     State.players['enemy'] = Player.create('enemy');
     
-    State.map = createTestMap(map);
-    
-    player.pos = {
-        x: map.playerCastle[0],
-        y: map.playerCastle[1]
-    };
+    State.map = createTestMap(map, player.name);
 
-    // make sure the player castle is not in water
-    if (State.map.rows[player.pos.y][player.pos.x].type === 'water') {
-        qLog(chalk.red('Error: This benchmark map places the player castle in water!'));
-        throw 'Aborting';
-    }
-    // make sure the treasure is not in water
-    if (State.map.rows[map.treasure[1]][map.treasure[0]].type === 'water') {
-        qLog(chalk.red('Error: This benchmark map places the treasure in water!'));
-        throw 'Aborting';
-    }
-    
+    // Get the player starting position
+    State.map.rows.forEach((row, y) => {
+        row.forEach((tile, x) => {
+            if (tile.castle === player.name) {
+                player.pos = {
+                    x: x,
+                    y: y
+                };
+            }
+        });
+    });
+
     res.send(Response.view(player, State.map));
     player.moveTimer = Date.now();
 
@@ -105,48 +107,44 @@ function start(State, req, res, io) {
  * 
  * @param blueprint - a blueprint for a Map object, with the following properties:
  * - mapString: a multi-line string, where each char represents a terrain tile:
- *      e.g.`ggg
- *           mww
- *           gff`
- *      would result in a 3 x 3 map.
- * - playerCastle: [x, y] coordinates of the player castle, originating from top-left, e.g. [1, 1].
- * - enemyCastle: as above, for enemy castle.
- * - treasure: as above, for the treasure.
+ *      e.g.`gP g  g
+ *           m  wE w
+ *           g  f  fT`
+ *      would result in a 3 x 3 map, with the player castle located at [0, 0],
+ *      the enemy castle located at [1, 1] and the treasure at [2, 2]
  */
-function createTestMap(blueprint) {
+function createTestMap(blueprint, playerName) {
     var testMap = {
         size: 0,
         rows: []
     };
     
     testMap.rows = blueprint.mapString.trim().split('\n')
-        .map(line => line.trim().split(/\s*/).map(charToTile));
+        .map(line => line.trim().split(/\s+/).map(chars => charsToTile(chars, playerName)));
     testMap.size = testMap.rows.length;
-    
-    // place the player castle
-    var pc = blueprint.playerCastle;
-    testMap.rows[pc[1]][pc[0]].castle = 'player';
-    
-    // place the enemy castle
-    var ec = blueprint.enemyCastle;
-    testMap.rows[ec[1]][ec[0]].castle = 'enemy';
-    
-    // place the treasure
-    var t = blueprint.treasure;
-    testMap.rows[t[1]][t[0]].treasure = true;
     
     return testMap;
 }
 
 /**
  * Given a char (g, m, w, f), returns a tile object
- * with the matching type.
- * @param char
+ * with the matching terrain type.
+ * 
+ * Also accounts for features:
+ * - player castle (P)
+ * - enemy castle (E)
+ * - treasure (T)
+ * 
+ * @param chars
  */
-function charToTile(char) {
+function charsToTile(chars, playerName) {
     var type;
-    
-    switch (char) {
+    var terrainType = chars.match(/[gmfw]/)[0];
+    if (!terrainType) {
+        qLog(chalk.red(`Error: map terrain symbol '${chars}' is invalid`));
+        throw 'Aborting';
+    }
+    switch (terrainType) {
         case 'g':
             type = 'grass';
             break;
@@ -160,8 +158,35 @@ function charToTile(char) {
             type = 'water';
             break;
     }
+
+    var tile = {type: type};
+
+    var featureMatch = chars.match(/[PET]/);
+    if (featureMatch) {
+        switch (featureMatch[0]) {
+            case 'P':
+                tile.castle = playerName;
+                // make sure the player castle is not in water
+                if (type === 'water') {
+                    qLog(chalk.red('Error: This benchmark map places the player castle in water!'));
+                    throw 'Aborting';
+                }
+                break;
+            case 'E':
+                tile.castle = 'enemy';
+                break;
+            case 'T':
+                tile.treasure = true;
+                // make sure the treasure is not in water
+                if (type === 'water') {
+                    qLog(chalk.red('Error: This benchmark map places the treasure in water!'));
+                    throw 'Aborting';
+                }
+                break;
+        }
+    }
     
-    return { type: type };
+    return tile;
 }
 
 // When playing the game, responses are sent alternately for the player and the the
@@ -212,7 +237,7 @@ function printReport() {
 
     if (!s.reportSent) {
         if (s.result === 'won') {
-            qLog('====== YOU WON ======');
+            qLog(chalk.blue('====== YOU WON ======'));
         } else {
             qLog(chalk.red(`====== ${s.result.toUpperCase()} =======`));
         }
@@ -231,6 +256,7 @@ function printReport() {
         qLog(chalk.blue.underline.bold('Total turns: ' + total));
 
         s.reportSent = true;
+        setTimeout(onEndCallback, 100);
     }
 }
 
@@ -263,10 +289,19 @@ function qLog(message) {
     console.log(chalk.green(`[QuestMark] ` + message));
 }
 
+/**
+ * Callback to execute when the benchmark ends.
+ * @param fn
+ */
+function onEnd(fn) {
+    onEndCallback = fn;
+}
+
 module.exports = {
     argRe: argRe,
     loadMap: loadMap,
     start: start,
     enemyReq: enemyReq,
-    patchResponse: patchResponse
+    patchResponse: patchResponse,
+    onEnd: onEnd
 };
