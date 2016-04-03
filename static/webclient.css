@@ -9,11 +9,13 @@ html, body {
     background: #333;
 }
 
-#welcome {
+#welcome, #result {
     position: absolute;
     top: 30%;
+    padding: 30px;
     text-align: center;
-    width: 100%;    
+    width: 100%;
+    background: rgba(0,0,0,0.7);   
 }
 
 .row {
@@ -49,6 +51,11 @@ html, body {
     background-image: url('tile-avatar-player1.svg');
     width: 80px;
     height: 80px;
+}
+
+#result .avatar__player1, #result .avatar__player2 {
+    position: relative;
+    display: inline-block;
 }
 
 .avatar__player1 .name, .avatar__player2 .name {

@@ -28,18 +28,20 @@
 
 	io.on('gameover', function (strdata) {
 		var res = JSON.parse(strdata);
-		// var $result = $$('result');
-		// if (res.result === 'draw') {
-		// 	$result.innerText = 'DRAW';
-		// } else {
-		// 	$result.innerText = 'Winner: ' + res.winner;
-		// }
-		// $result.style.display = 'block';
+        var $result = $$('result');
+		if (res.result === 'draw') {
+			$result.getElementsByTagName('H1')[0].innerText = 'DRAW';
+			$result.getElementsByTagName('DIV')[0].className = '';
+		} else {
+            $result.getElementsByTagName('H1')[0].innerText = res.winner + ' won!';
+            $result.getElementsByTagName('DIV')[0].className = $$(res.winner).className;
+		}
+        removeClass($result, 'hide');
 	});
 
     function clean() {
         $$('welcome').className = 'hide';
-        removeClass($$('result'), 'hide');
+        $$('result').className = 'hide';
         removeClass(elByClass('avatar__player1'), 'hide');
         removeClass(elByClass('avatar__player2'), 'hide');
         Array.prototype.slice.call(document.getElementsByClassName('row')).forEach(function ($el) {
