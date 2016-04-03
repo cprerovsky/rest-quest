@@ -1,101 +1,87 @@
-body {
-	background-color: #414141;
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Courier New, Courier, monospace;
+    font-size: 18px;
+    color: white;
+    background: #333;
 }
 
-#map {
-	margin: auto;
-	padding: 0;
-	border-spacing: 0;
-	border-collapse: collapse;
+#welcome, #result {
+    position: absolute;
+    top: 30%;
+    padding: 30px;
+    text-align: center;
+    width: 100%;
+    background: rgba(0,0,0,0.7);   
 }
 
-#map tr, #map td {
-	padding: 0px;
-	margin: 0px;
-	border: 2px solid #414141;
-	border-radius: 10px;
-}
-.tile, .avatar {
-	width: 60px;
-	height: 60px;
-	background-color: #679E39;
-	text-align: center;
+.row {
+    width: 100%;
+    text-align: center;
 }
 
-.tile i {
-	font-size: 40px;
+.tile {
+    display: inline-block;
+    background-size: 105%;
+    background-position: center;
+}
+
+.grass {
+    background-image: url('tile-grass.svg');
 }
 
 .forest {
-	color: rgb(31,86,0);
+	background-image: url('tile-forest.svg');
 }
 
 .mountain {
-	color: #414141;
-	background-color: #666;
+    background-image: url('tile-mountain.svg');
 }
 
 .water {
-	background-color: #28666C;
+	background-image: url('tile-water.svg');
 }
 
-#players div {
-	width: 46%;
-	float: left;
+.avatar__player1, .avatar__player2 {
+    position: absolute;
+    transition: top 0.3s, left 0.3s;
+    background-image: url('tile-avatar-player1.svg');
+    width: 80px;
+    height: 80px;
 }
 
-#players .player1 {
-	text-align: right;
+#result .avatar__player1, #result .avatar__player2 {
+    position: relative;
+    display: inline-block;
 }
 
-#players .player1, #players .player2 {
-	padding: 2%;
+.avatar__player1 .name, .avatar__player2 .name {
+    position: absolute;
+    bottom: -30px;
+    background: #666;
+    padding: 3px;
+    white-space: nowrap;
 }
 
-.avatar, .player1, .player2 {
-	font-size: 60px;
+.avatar__player2 {
+    background-image: url('tile-avatar-player2.svg');
 }
 
-.player1 {
-	color: rgb(0, 139, 255);
+.castle__player1 {
+    background-image: url('tile-castle-player1.svg');
 }
 
-.player2 {
-	color: rgb(255, 77, 0);
+.castle__player2 {
+    background-image: url('tile-castle-player2.svg');
 }
 
-.avatar {
-	position: absolute;
-	top: 0;
-	right: 0;
-	background: transparent;
-	-webkit-transition: top 0.2s, left 0.2s;
-	transition: top 0.2s, left 0.2s;
+.treasure {
+    background-image: url('tile-treasure.svg');
 }
 
-.fi-crown {
-	color: #FFD700;
-}
-
-.avatar .fi-crown {
-	color: #FFD700;
-	position: absolute;
-	top: 0;
-	left: 0;
-	font-size: 30px;
-}
-
-#result {
-	display: none;
-	padding: 5% 0;
-	background: rgba(0,0,0,0.3);
-	color: white;
-	font-size: 100px;
-	height: 100px;
-	margin-top: 10%;
-	text-align: center;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
+.hide {
+    display: none;
 }

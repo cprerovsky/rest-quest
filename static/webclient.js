@@ -4,11 +4,9 @@
 
 	io = io.connect();
 
-	// Listen for the talk event.
 	io.on('start', function(strdata) {
 	    var data = JSON.parse(strdata);
-	    $$('result').style.display = 'none';
-	    Array.prototype.slice.call(document.getElementsByClassName('fi-crown')).forEach(function (el) { el.remove(); });
+        clean();
 	    drawMap(data.map);
 	    placePlayers(data.players);
 	});
@@ -23,74 +21,79 @@
 
 	io.on('pickup', function (strdata) {
 		var player = JSON.parse(strdata);
-		var $treasure = $$('tile-' + player.pos.x + '-' + player.pos.y).getElementsByClassName('fi-crown')[0];
-		$$(player.name).appendChild($treasure);
+		setTimeout(function () {
+            elByClass('treasure', $$('tile-' + player.pos.x + '-' + player.pos.y)).remove();
+        }, 1000);
 	});
 
 	io.on('gameover', function (strdata) {
 		var res = JSON.parse(strdata);
-		var $result = $$('result');
+        var $result = $$('result');
 		if (res.result === 'draw') {
-			$result.innerText = 'DRAW';
+			$result.getElementsByTagName('H1')[0].innerText = 'DRAW';
+			$result.getElementsByTagName('DIV')[0].className = '';
 		} else {
-			$result.innerText = 'Winner: ' + res.winner;
+            $result.getElementsByTagName('H1')[0].innerText = res.winner + ' won!';
+            $result.getElementsByTagName('DIV')[0].className = $$(res.winner).className;
 		}
-		$result.style.display = 'block';
+        removeClass($result, 'hide');
 	});
 
+    function clean() {
+        $$('welcome').className = 'hide';
+        $$('result').className = 'hide';
+        removeClass(elByClass('avatar__player1'), 'hide');
+        removeClass(elByClass('avatar__player2'), 'hide');
+        Array.prototype.slice.call(document.getElementsByClassName('row')).forEach(function ($el) {
+            $el.remove();
+        });
+    }
+
 	function drawMap (map) {
-		var $tr;
-		var $td;
-		var $table = $$('map');
-		$table.innerHTML = '';
+        var num = map.rows.length;
+        var $body = document.getElementsByTagName('body')[0];
+        var height = $body.scrollHeight; 
+        var size = parseInt(height / num, 10);
+        var $r, $c, row;
 		for (var y=map.rows.length-1; y>=0; y--) {
-			var row = map.rows[y];
-			$tr = el('TR');
+			row = map.rows[y];
+            $r = el('DIV');
+            $r.style.height = size + 'px';
+            $r.className='row';
 			row.forEach(function (tile, x) {
-				$td = el('TD');
-				$td.id = 'tile-' + x + '-' + y;
-				$td.className = '';
-				if (tile.castle) {
-					$td.appendChild(icon('fi-shield'));
-				} else if (tile.treasure) {
-					$td.appendChild(icon('fi-crown'));
-				} else if (tile.type === 'forest') {
-					$td.appendChild(icon('fi-trees'));
-				} else if (tile.type === 'mountain') {
-					$td.appendChild(icon('fi-mountains'));
-				}
-				$td.className += 'tile ' + tile.type;
-				$tr.appendChild($td);
-			});
-			$table.appendChild($tr);
-		}
+                $c = mapTile(tile.type, size, 'tile-' + x + '-' + y);
+                if (tile.castle) $c.appendChild(mapTile('castle__player1', size));
+                if (tile.treasure) $c.appendChild(mapTile('treasure', size));
+                $r.appendChild($c);
+            });
+            $body.appendChild($r);
+        }
+        // though ugly, we will also resize the player sprites here
+        resizePlayerSprite('avatar__player1', size);
+        resizePlayerSprite('avatar__player2', size);
 	}
+    
+    function resizePlayerSprite(className, size) {
+        var $sprite = elByClass(className);
+        $sprite.style.width = $sprite.style.height = size + 'px';
+    }
 
 	function placePlayers (players) {
-		var names = Object.keys(players);
-		var i=1;
-		var $players = $$('players');
 		var $pdiv;
-		var $avatar;
+        var names = Object.keys(players);
+		var i=1;
 		names.forEach(function (name) {
-			$pdiv = $players.getElementsByClassName('player' + i)[0];
-			$pdiv.innerHTML = '';
-			$pdiv.appendChild(icon('fi-torso'));
-			$pdiv.appendChild(t(' ' + name));
-
-			// link player to avatar
-			$avatar = document.getElementsByClassName('avatar player' + i)[0];
-			$avatar.id = name;
-
+			$pdiv = elByClass('avatar__player' + i);
+            $pdiv.id = name;
+            elByClass('name', $pdiv).innerText = name;
 			move(players[name]);
-
 			i++;
 		});
 	}
 
 	function move(player) {
-		var $avatar        = $$(player.name);
 		var boundingRect   = $$('tile-' + player.pos.x + '-' + player.pos.y).getBoundingClientRect();
+		var $avatar        = $$(player.name);
 		$avatar.style.top  = boundingRect.top + 'px';
 		$avatar.style.left = boundingRect.left + 'px';
 	}
@@ -103,13 +106,35 @@
 		return document.createElement(nodeName);
 	}
 
+    function mapTile(type, size, id) {
+        var $tile = el('DIV');
+        $tile.className = 'tile ' + type; 
+        $tile.style.width = $tile.style.height = size + 'px';
+        if (id) $tile.id = id;
+        return $tile;
+    }
+
 	function icon (type) {
 		var $i = el('I');
 		$i.className = type;
 		return $i;
 	}
 
+    function removeClass(el, className) {
+        var classes = el.className.split(' ');
+        var newClasses = [];
+        classes.forEach(function (c) {
+            if (c != className) newClasses.push(c);
+        });
+        el.className = newClasses.join(' ');
+    }
+
 	function $$ (id) {
 		return document.getElementById(id);
 	}
+    
+    function elByClass(className, rootNode) {
+        rootNode = rootNode || document;
+        return rootNode.getElementsByClassName(className)[0];
+    }
 })(io, document);
