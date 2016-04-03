@@ -32,12 +32,34 @@ html, body {
 	background-image: url('tile-water.svg');
 }
 
-.avatar {
-    background-image: url('tile-avatar.svg');
+.avatar__player1, .avatar__player2 {
+    position: absolute;
+    transition: top 0.3s, left 0.3s;
+    background-image: url('tile-avatar-player1.svg');
+    width: 80px;
+    height: 80px;
 }
 
-.castle {
-    background-image: url('tile-castle.svg');
+.avatar__player1 .name, .avatar__player2 .name {
+    position: absolute;
+    bottom: -30px;
+    background: #666;
+    font: 14px monospace;
+    color: white;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+.avatar__player2 {
+    background-image: url('tile-avatar-player2.svg');
+}
+
+.castle__player1 {
+    background-image: url('tile-castle-player1.svg');
+}
+
+.castle__player2 {
+    background-image: url('tile-castle-player2.svg');
 }
 
 .treasure {
