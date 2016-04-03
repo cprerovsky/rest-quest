@@ -22,8 +22,9 @@
 
 	io.on('pickup', function (strdata) {
 		var player = JSON.parse(strdata);
-		// var $treasure = elByClass('treasure', $$('tile-' + player.pos.x + '-' + player.pos.y));
-		// $$(player.name).appendChild($treasure);
+		setTimeout(function () {
+            elByClass('treasure', $$('tile-' + player.pos.x + '-' + player.pos.y)).remove();
+        }, 1000);
 	});
 
 	io.on('gameover', function (strdata) {
