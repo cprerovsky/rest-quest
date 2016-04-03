@@ -123,7 +123,23 @@ When the game is over because you or your opponent died, or took a treasure to t
 }
 ```
 
+## Benchmarking
+
+To run benchmarks against your client, run:
+```
+node benchmark -[mapNumber]
+```
+Where mapNumber is an integer corresponding to a mapX.js file in
+the benchmark folder, i.e `node benchmark -2` will load `map2.js`.
+
+The benchmark uses a hard-coded map and outputs stats about how your
+client performed at the end of the game. 
+
 # Changelog
+
+## Version 0.3.0
+
+* added benchmark framework
 
 ## Version 0.2.0
 

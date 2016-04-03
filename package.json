@@ -1,15 +1,16 @@
 {
   "name": "rest-quest",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A HTTP REST client server game. Yeah, that does not sound like much fun.",
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.9.2",
+    "chalk": "^1.1.3",
+    "coffee-script": "^1.10.0",
+    "connect": "^3.4.1",
     "cors": "^2.5.3",
     "express.io": "~1.1.13",
-    "request": "^2.48.0",
-    "connect": "^3.4.1",
-    "coffee-script": "^1.10.0"
+    "request": "^2.48.0"
   },
   "devDependencies": {},
   "scripts": {
