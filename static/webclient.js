@@ -6,7 +6,6 @@
 
 	io.on('start', function(strdata) {
 	    var data = JSON.parse(strdata);
-	    // Array.prototype.slice.call(document.getElementsByClassName('fi-crown')).forEach(function (el) { el.remove(); });
         clean();
 	    drawMap(data.map);
 	    placePlayers(data.players);
@@ -39,6 +38,10 @@
 	});
 
     function clean() {
+        $$('welcome').className = 'hide';
+        removeClass($$('result'), 'hide');
+        removeClass(elByClass('avatar__player1'), 'hide');
+        removeClass(elByClass('avatar__player2'), 'hide');
         Array.prototype.slice.call(document.getElementsByClassName('row')).forEach(function ($el) {
             $el.remove();
         });
@@ -114,6 +117,15 @@
 		$i.className = type;
 		return $i;
 	}
+
+    function removeClass(el, className) {
+        var classes = el.className.split(' ');
+        var newClasses = [];
+        classes.forEach(function (c) {
+            if (c != className) newClasses.push(c);
+        });
+        el.className = newClasses.join(' ');
+    }
 
 	function $$ (id) {
 		return document.getElementById(id);
