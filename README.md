@@ -140,6 +140,7 @@ client performed at the end of the game.
 ## Version 0.3.0
 
 * added benchmark framework
+* reimplemented webclient and added new tile graphics
 
 ## Version 0.2.0
 
