@@ -79,7 +79,8 @@ function start(State, req, res, io) {
 
     var player = Player.create(req.body.name);
     State.players[player.name] = player;
-    State.players['enemy'] = Player.create('enemy');
+    var enemy = Player.create('enemy');
+    State.players['enemy'] = enemy;
     
     State.map = createTestMap(map, player.name);
 
@@ -92,7 +93,13 @@ function start(State, req, res, io) {
                     y: y
                 };
             }
-        });
+            if (tile.castle === enemy.name) {
+                enemy.pos = {
+                    x: x,
+                    y: y
+                };
+            }
+         });
     });
 
     res.send(Response.view(player, State.map));
